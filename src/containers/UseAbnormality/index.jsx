@@ -1,0 +1,89 @@
+import React, { Component } from "react"; // 引入了React和PropTypes。PropTypes是用于检查props参数类型，可有可无，最好是有
+// import { BrowserRouter, Route, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
+
+//连接redux
+// import { bindActionCreators } from "redux";
+import { connect } from "react-redux";
+
+//导入action
+// import { } from '../../../store/action';
+
+//antd-mobile
+import { List, Checkbox, TextareaItem } from 'antd-mobile';
+import { createForm } from "rc-form";
+// import "./index.less";
+ import "antd-mobile/dist/antd-mobile.css"; // or 'antd-mobile/dist/antd-mobile.less'
+// request请求
+// import { request, requestaxios } from "../../util/request";
+import { requestaxios } from "../../util/request";
+
+//公共组件
+import C_Button from '../../components/C_Button';
+
+// import Header from "../Header/index";
+
+const CheckboxItem = Checkbox.CheckboxItem;
+const AgreeItem = Checkbox.AgreeItem;
+class childe extends Component {
+    constructor(props) {
+        super(props);
+    }
+    componentDidMount() {
+    }
+    _onChange = (val) => {
+        console.log(val);
+    }
+    render() {
+        const { getFieldProps } = this.props.form;
+        const data = [
+            { value: 0, label: '通电后,仍然无法使用' },
+            { value: 1, label: '空气净化器损坏' },
+            { value: 2, label: '无法净化空气' },
+        ];
+        return (
+            <div className="cl-UseAbnormality">
+                <div>
+                    <List renderHeader={() => '选择异常状况'}>
+                        {data.map(i => (
+                            <CheckboxItem key={i.value} onChange={() => this._onChange(i.value)}>
+                                {i.label}
+                            </CheckboxItem>
+                        ))}
+                    </List>
+                    <List renderHeader={() => '备注'}>
+                        <TextareaItem
+                            {...getFieldProps('count', {
+                                initialValue: '请填写备注信息...',
+                            }) }
+                            rows={5}
+                            count={100}
+                        />
+                    </List>
+                    <C_Button buttonType={"提交"} />
+
+                </div>
+            </div>);
+    }
+}
+
+// 将 store 中的数据作为 props 绑定到 LoginForm 上
+const mapStateToProps = (state, ownProps) => {
+    // let { Common, ClickAdd, LoginApp } = state;
+    // let { InitialDataReducer } = state; //获取reducer中的方法
+    // return {
+    //     InitialData: InitialDataReducer.InitialData,
+    // }
+    return {
+    }
+};
+// 将 action 作为 props 绑定到 Product 上。我感觉是把actions方法添加到props上
+// const mapDispatchToProps = (dispatch, ownProps) => ({
+//     actions: bindActionCreators({ }, dispatch) //发射action中的方法
+// });
+
+// const createFormLogin_redux = connect(mapStateToProps, mapDispatchToProps)(createForm()(Login)); // 连接redux
+const createFormMain_redux = connect(mapStateToProps)(createForm()(childe)); // 连接redux
+
+
+export default createFormMain_redux;
